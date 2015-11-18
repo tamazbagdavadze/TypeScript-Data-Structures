@@ -141,6 +141,16 @@
             return null;
         }
 
+        groupBy = () => {
+            var result = new List<List<number>>();
+
+            var length = this.currentIndex;
+
+            for (let i = 0; i < length; i++) {
+                
+            }
+        }
+
         toString = ():string => {
             return this.arr.toString() + " currentIndex = " + this.currentIndex;
         }
