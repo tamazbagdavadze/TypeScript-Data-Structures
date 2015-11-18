@@ -1,6 +1,6 @@
 ﻿module MyLib {
     export class List<T> {
-        arr: T[];
+        private arr: T[]; 
         private currentIndex = 0;
 
         get length() {
@@ -107,6 +107,26 @@
             return results[0];
         }
 
+        first = (fn: IPredictorFn<T>): T => {
+            var results = this.arr.filter(fn);
+            
+            if (results.length === 0) {
+                throw new Error("Element not found");
+            }
+
+            return results[0];
+        }
+
+        firstOrDefault = (fn: IPredictorFn<T>):T => {
+            var results = this.arr.filter(fn);
+
+            if (results.length === 0) {
+                return null;
+            }
+
+            return results[0];
+        }
+
         singleOrDefault = (fn: IPredictorFn<T>): T => {
 
             var results = this.arr.filter(fn);
@@ -121,6 +141,10 @@
             return null;
         }
 
+        toString = ():string => {
+            return this.arr.toString() + " currentIndex = " + this.currentIndex;
+        }
+
         private isCorrectIndex = (index: number): boolean => {
             if (index > this.currentIndex - 1 || index < 0) {
                 return false;
@@ -130,7 +154,7 @@
 
         private growArray = (): void => {
             var newArr = Array<T>(this.arr.length * 2);
-
+            //TODO optimize (undefined)
             for (let i = 0; i < this.arr.length; i++) {
                 newArr[i] = this.arr[i];
             }
