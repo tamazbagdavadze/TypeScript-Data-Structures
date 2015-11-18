@@ -27,8 +27,7 @@
         }
 
         removeAt = (index: number) => {
-
-
+            
             if (this.currentIndex === 0) {
                 throw new Error("collection empty");
             }
@@ -36,14 +35,13 @@
             if (this.isCorrectIndex(index) === false) {
                 throw new Error("wrong index");
             }
-
-
+            
             this.arr.splice(index, 1);
             this.currentIndex--;
         }
 
         remove = (obj: T, deleteAll: boolean = false) => {
-
+            // TODO change/optimize
             for (let n = 0; n < this.arr.length; n++) {
                 if (this.arr[n] === obj) {
                     this.arr.splice(n, 1);
@@ -91,6 +89,25 @@
         where = (fn: IPredictorFn<T>): T[] => {
             var results = this.arr.filter(fn);
             return results;
+        }
+
+        distinct = (comparerFn:IComparer<T> = null): T[] => {
+
+            var length = this.currentIndex;
+            var result = new Array<T>();
+
+            for (var i = 0; i < length; i++) {
+
+                let isNotDuplicate = result.every((obj) => {
+                     return obj !== this.arr[i];
+                });
+
+                if (isNotDuplicate) {
+                    result.push(this.arr[i]);
+                }
+            }
+
+            return result;
         }
 
         single = (fn: IPredictorFn<T>): T => {
@@ -165,7 +182,7 @@
         private growArray = (): void => {
             var newArr = Array<T>(this.arr.length * 2);
             //TODO optimize (undefined)
-            for (let i = 0; i < this.arr.length; i++) {
+            for (let i = 0; i < this.currentIndex; i++) {
                 newArr[i] = this.arr[i];
             }
 
@@ -176,5 +193,9 @@
 
     export interface IPredictorFn<T> {
         (item: T): boolean;
+    }
+
+    export interface IComparer<T> {
+        (obj1: T, obj2: T): boolean
     }
 }

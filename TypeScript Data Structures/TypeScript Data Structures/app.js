@@ -24,6 +24,7 @@ var MyLib;
             };
             this.remove = function (obj, deleteAll) {
                 if (deleteAll === void 0) { deleteAll = false; }
+                // TODO change/optimize
                 for (var n = 0; n < _this.arr.length; n++) {
                     if (_this.arr[n] === obj) {
                         _this.arr.splice(n, 1);
@@ -42,6 +43,20 @@ var MyLib;
             this.where = function (fn) {
                 var results = _this.arr.filter(fn);
                 return results;
+            };
+            this.distinct = function (comparerFn) {
+                if (comparerFn === void 0) { comparerFn = null; }
+                var length = _this.currentIndex;
+                var result = new Array();
+                for (var i = 0; i < length; i++) {
+                    var isNotDuplicate = result.every(function (obj) {
+                        return obj !== _this.arr[i];
+                    });
+                    if (isNotDuplicate) {
+                        result.push(_this.arr[i]);
+                    }
+                }
+                return result;
             };
             this.single = function (fn) {
                 var results = _this.arr.filter(fn);
@@ -95,7 +110,7 @@ var MyLib;
             this.growArray = function () {
                 var newArr = Array(_this.arr.length * 2);
                 //TODO optimize (undefined)
-                for (var i = 0; i < _this.arr.length; i++) {
+                for (var i = 0; i < _this.currentIndex; i++) {
                     newArr[i] = _this.arr[i];
                 }
                 _this.arr = newArr;
@@ -140,12 +155,23 @@ var MyLib;
 /// <reference path="List.ts"/>
 var MyLib;
 (function (MyLib) {
+    var A = (function () {
+        function A() {
+        }
+        return A;
+    })();
+    var f;
+    f = compare;
+    function compare(obj1, obj2) {
+        return null;
+    }
     var l = new MyLib.List(10);
     for (var i = 0; i < 10; i++) {
         l.add(i * i);
     }
     l.add(11);
     l.setAt(0, 11);
+    console.log(l.distinct());
     l.remove(81);
     l.remove(11, true); // remove all elements
     l.add(4);
