@@ -7,6 +7,10 @@
             return this.currentIndex;
         }
 
+        get capacity() {
+            return this.arr.length;
+        }
+
         constructor(initLength: number = null) {
             if (initLength != null) {
                 var length = Math.pow(2, Math.ceil(Math.log(initLength) / Math.log(2)));
@@ -37,21 +41,6 @@
             }
 
             return this;
-        }
-
-        private addList = (list: List<T>): void => {
-            
-            var length = list.length;
-
-            for (let i = 0; i < length; i++) {
-                this.add(list.getAt(i));
-            }
-        }
-
-        private addArray = (arr: T[]) : void => {
-            for (let i of arr) {
-                this.add(i);
-            }
         }
 
         removeAt = (index: number) => {
@@ -86,6 +75,32 @@
 
         removeFirst = () => {
             this.removeAt(0);
+        }
+
+        any = (fn: IPredictorFn<T>): boolean => {
+
+            var length = this.currentIndex;
+
+            for (let i = 0; i < length; i++) {
+                if (fn(this.arr[i])) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        all = (fn: IPredictorFn<T>): boolean => {
+
+            var length = this.currentIndex;
+
+            for (let i = 0; i < length; i++) {
+                if (fn(this.arr[i]) === false) {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         getAt(index: number) {
@@ -186,6 +201,11 @@
             return null;
         }
 
+        clear = () => {
+            this.arr = new Array<T>(4);
+            this.currentIndex = 0;
+        }
+
         groupBy = () => {
             var result = new List<List<number>>();
 
@@ -200,6 +220,21 @@
             return this.arr.toString() + " currentIndex = " + this.currentIndex;
         }
 
+        private addList = (list: List<T>): void => {
+
+            var length = list.length;
+
+            for (let i = 0; i < length; i++) {
+                this.add(list.getAt(i));
+            }
+        }
+
+        private addArray = (arr: T[]): void => {
+            for (let i of arr) {
+                this.add(i);
+            }
+        }
+        
         private isCorrectIndex = (index: number): boolean => {
             if (index > this.currentIndex - 1 || index < 0) {
                 return false;

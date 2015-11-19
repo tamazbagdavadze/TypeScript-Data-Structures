@@ -12,18 +12,6 @@ var MyLib;
                 _this.arr[_this.currentIndex] = item;
                 _this.currentIndex++;
             };
-            this.addList = function (list) {
-                var length = list.length;
-                for (var i = 0; i < length; i++) {
-                    _this.add(list.getAt(i));
-                }
-            };
-            this.addArray = function (arr) {
-                for (var _i = 0; _i < arr.length; _i++) {
-                    var i = arr[_i];
-                    _this.add(i);
-                }
-            };
             this.removeAt = function (index) {
                 if (_this.currentIndex === 0) {
                     throw new Error("collection empty");
@@ -51,6 +39,24 @@ var MyLib;
             };
             this.removeFirst = function () {
                 _this.removeAt(0);
+            };
+            this.any = function (fn) {
+                var length = _this.currentIndex;
+                for (var i = 0; i < length; i++) {
+                    if (fn(_this.arr[i])) {
+                        return true;
+                    }
+                }
+                return false;
+            };
+            this.all = function (fn) {
+                var length = _this.currentIndex;
+                for (var i = 0; i < length; i++) {
+                    if (fn(_this.arr[i]) === false) {
+                        return false;
+                    }
+                }
+                return true;
             };
             this.where = function (fn) {
                 var results = _this.arr.filter(fn);
@@ -104,6 +110,10 @@ var MyLib;
                 }
                 return null;
             };
+            this.clear = function () {
+                _this.arr = new Array(4);
+                _this.currentIndex = 0;
+            };
             this.groupBy = function () {
                 var result = new List();
                 var length = _this.currentIndex;
@@ -112,6 +122,18 @@ var MyLib;
             };
             this.toString = function () {
                 return _this.arr.toString() + " currentIndex = " + _this.currentIndex;
+            };
+            this.addList = function (list) {
+                var length = list.length;
+                for (var i = 0; i < length; i++) {
+                    _this.add(list.getAt(i));
+                }
+            };
+            this.addArray = function (arr) {
+                for (var _i = 0; _i < arr.length; _i++) {
+                    var i = arr[_i];
+                    _this.add(i);
+                }
             };
             this.isCorrectIndex = function (index) {
                 if (index > _this.currentIndex - 1 || index < 0) {
@@ -138,6 +160,13 @@ var MyLib;
         Object.defineProperty(List.prototype, "length", {
             get: function () {
                 return this.currentIndex;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(List.prototype, "capacity", {
+            get: function () {
+                return this.arr.length;
             },
             enumerable: true,
             configurable: true
