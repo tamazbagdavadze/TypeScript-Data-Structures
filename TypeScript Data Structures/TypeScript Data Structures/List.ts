@@ -25,6 +25,34 @@
             this.arr[this.currentIndex] = item;
             this.currentIndex++;
         }
+        
+        addRange(items: List<T>) : List<T>;
+        addRange(items: T[]) : List<T>;
+        addRange(items): List<T>{
+            
+            if (items instanceof List) {
+                this.addList(items as List<T>);
+            }else if (items instanceof Array) {
+                this.addArray(items as Array<T>);
+            }
+
+            return this;
+        }
+
+        private addList = (list: List<T>): void => {
+            
+            var length = list.length;
+
+            for (let i = 0; i < length; i++) {
+                this.add(list.getAt(i));
+            }
+        }
+
+        private addArray = (arr: T[]) : void => {
+            for (let i of arr) {
+                this.add(i);
+            }
+        }
 
         removeAt = (index: number) => {
             

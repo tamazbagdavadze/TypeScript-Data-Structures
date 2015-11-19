@@ -12,6 +12,18 @@ var MyLib;
                 _this.arr[_this.currentIndex] = item;
                 _this.currentIndex++;
             };
+            this.addList = function (list) {
+                var length = list.length;
+                for (var i = 0; i < length; i++) {
+                    _this.add(list.getAt(i));
+                }
+            };
+            this.addArray = function (arr) {
+                for (var _i = 0; _i < arr.length; _i++) {
+                    var i = arr[_i];
+                    _this.add(i);
+                }
+            };
             this.removeAt = function (index) {
                 if (_this.currentIndex === 0) {
                     throw new Error("collection empty");
@@ -130,6 +142,15 @@ var MyLib;
             enumerable: true,
             configurable: true
         });
+        List.prototype.addRange = function (items) {
+            if (items instanceof List) {
+                this.addList(items);
+            }
+            else if (items instanceof Array) {
+                this.addArray(items);
+            }
+            return this;
+        };
         List.prototype.getAt = function (index) {
             if (this.currentIndex === 0) {
                 throw new Error("collection empty");
@@ -155,28 +176,10 @@ var MyLib;
 /// <reference path="List.ts"/>
 var MyLib;
 (function (MyLib) {
-    var A = (function () {
-        function A() {
-        }
-        return A;
-    })();
-    var f;
-    f = compare;
-    function compare(obj1, obj2) {
-        return null;
-    }
-    var l = new MyLib.List(10);
-    for (var i = 0; i < 10; i++) {
-        l.add(i * i);
-    }
-    l.add(11);
-    l.setAt(0, 11);
-    console.log(l.distinct());
-    l.remove(81);
-    l.remove(11, true); // remove all elements
-    l.add(4);
-    console.log(l.singleOrDefault(function (i) { return i === 456; }));
-    //console.log(l.single((i)=>{return i === 456}));
-    console.log(l.toString());
+    var list = new MyLib.List(10);
+    list.add(4);
+    list.add(8);
+    list.add(6);
+    console.log(list.addRange([45, 35, 153]));
 })(MyLib || (MyLib = {}));
 //# sourceMappingURL=app.js.map
